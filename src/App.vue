@@ -1,9 +1,25 @@
 <script setup lang="ts">
-import satellitesData from './satellites.json'
+import { onMounted, ref, watch } from 'vue'
+import { createRouter, createWebHistory } from 'vue-router'
 import SatelliteTile from '@/components/satellite/satellite-tile.vue'
 import { fetchSatellites } from '@/queries/fetch-satellites'
 import type { Satellite } from '@/types/satellite'
-import { onMounted, ref, watch } from 'vue'
+import {
+  countryCodeOptions,
+  orbitRegimeOptions,
+  orbitTypeOptions
+} from '@/utils/get-filter-options'
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes: [
+    {
+      path: '/',
+      name: 'Home',
+      component: () => import('@/App.vue')
+    }
+  ]
+})
 
 const satellitesRenderData = ref<Satellite[]>([])
 const searchString = ref('')
@@ -13,17 +29,8 @@ const orbitRegimeFilter = ref('')
 const objectTypeFilter = ref('')
 const loading = ref(false)
 
-const countryCodeOptions = [
-  ...new Set(satellitesData.filter((obj) => obj !== null).map((obj) => obj.countryCode))
-]
-
-const orbitRegimeOptions = [
-  ...new Set(satellitesData.filter((obj) => obj !== null).map((obj) => obj.orbitCode))
-]
-
-const orbitTypeOptions = [
-  ...new Set(satellitesData.filter((obj) => obj !== null).map((obj) => obj.objectType))
-]
+const uri = window.location.search
+const params = new URLSearchParams(uri)
 
 const prevPage = () => {
   if (currentPage.value > 1) {
@@ -32,8 +39,7 @@ const prevPage = () => {
 }
 
 const nextPage = () => {
-  console.log(satellitesRenderData.value.length / 10)
-  if (satellitesRenderData.value.length !== 0) {
+  if (satellitesRenderData.value.length !== 0 && satellitesRenderData.value.length >= 10) {
     currentPage.value++
   }
 }
@@ -56,6 +62,9 @@ const lazyLoadData = async () => {
 }
 
 onMounted(() => {
+  countryCodeFilter.value = params.get('countryCode') || ''
+  orbitRegimeFilter.value = params.get('orbitRegime') || ''
+  objectTypeFilter.value = params.get('objectType') || ''
   lazyLoadData()
 })
 
@@ -65,6 +74,13 @@ watch(currentPage, () => {
 
 watch([searchString, countryCodeFilter, orbitRegimeFilter, objectTypeFilter], () => {
   setPage(1)
+  router.push({
+    query: {
+      countryCode: countryCodeFilter.value,
+      orbitRegime: orbitRegimeFilter.value,
+      objectType: objectTypeFilter.value
+    }
+  })
   lazyLoadData()
 })
 </script>
