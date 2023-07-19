@@ -1,13 +1,18 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
-import SatelliteTile from '@/components/satellite/satellite-tile.vue'
+import SearchInput from '@/components/search/search-input.vue'
+import DropdownInput from '@/components/dropdown/dropdown-input.vue'
+import SatelliteWrapper from './components/satellite/satellite-wrapper.vue'
+import LoaderComponent from '@/components/loader/loader-component.vue'
+import NoData from '@/components/no-data/no-data.vue'
+import PaginationComponent from '@/components/pagination/pagination-component.vue'
 import { fetchSatellites } from '@/queries/fetch-satellites'
 import type { Satellite } from '@/types/satellite'
 import {
   countryCodeOptions,
   orbitRegimeOptions,
-  orbitTypeOptions
+  objectTypeOptions
 } from '@/utils/get-filter-options'
 
 const router = createRouter({
@@ -86,61 +91,37 @@ watch([searchString, countryCodeFilter, orbitRegimeFilter, objectTypeFilter], ()
 </script>
 
 <template>
-  <Header />
   <div class="w-[50%] mx-auto flex flex-col gap-2 my-12">
-    <input
-      v-model="searchString"
-      type="text"
-      placeholder="Search by name or Norad Cat Id"
-      class="border border-white bg-black rounded-md h-8 px-2"
-    />
+    <SearchInput placeholder="Search Satellites" v-model="searchString" />
     <div class="flex justify-between gap-2">
-      <select
+      <DropdownInput
         v-model="countryCodeFilter"
+        :filterOptions="countryCodeOptions"
         name="countryCode"
-        class="bg-black w-1/3 text-white border border-white rounded-md h-8"
-      >
-        <option value="">Select Country Code</option>
-        <option v-for="(countryCode, idx) in countryCodeOptions" :key="idx" :value="countryCode">
-          {{ countryCode }}
-        </option>
-      </select>
-      <select
+        defaultValue="Select Country Code"
+      />
+      <DropdownInput
         v-model="orbitRegimeFilter"
-        class="bg-black w-1/3 text-white border border-white rounded-md h-8"
-      >
-        <option value="">Select Orbit Regime</option>
-        <option v-for="(orbitRegime, idx) in orbitRegimeOptions" :key="idx" :value="orbitRegime">
-          {{ orbitRegime }}
-        </option>
-      </select>
-      <select
+        :filterOptions="orbitRegimeOptions"
+        name="orbitRegime"
+        defaultValue="Select Orbit Regime"
+      />
+      <DropdownInput
         v-model="objectTypeFilter"
-        class="bg-black w-1/3 text-white border border-white rounded-md h-8"
-      >
-        <option value="">Select Object Type</option>
-        <option v-for="(orbitType, idx) in orbitTypeOptions" :key="idx" :value="orbitType">
-          {{ orbitType }}
-        </option>
-      </select>
+        :filterOptions="objectTypeOptions"
+        name="objectType"
+        defaultValue="Select Object Type"
+      />
     </div>
-    <div
-      v-if="!loading && satellitesRenderData.length === 0"
-      class="text-center h-96 flex items-center justify-center"
-    >
-      No data found
-    </div>
-    <div v-if="loading" class="text-center h-96 flex items-center justify-center">Loading...</div>
-    <div v-else :class="`${satellitesRenderData.length !== 0 && 'border-b'} border-white`">
-      <div v-for="satellite in satellitesRenderData" :key="satellite.noradCatId">
-        <SatelliteTile :satellite="satellite" />
-      </div>
-    </div>
-    <div v-if="!loading" class="flex gap-2">
-      <button @click="prevPage">&lt;</button>
-      <div>{{ currentPage }}</div>
-      <button @click="nextPage">&gt;</button>
-    </div>
+    <NoData v-if="satellitesRenderData.length === 0 && !loading" />
+    <LoaderComponent v-if="loading" />
+    <SatelliteWrapper v-else :satellites="satellitesRenderData" />
+    <PaginationComponent
+      :currentPage="currentPage"
+      :loading="loading"
+      :prevPage="prevPage"
+      :nextPage="nextPage"
+    />
   </div>
 </template>
 

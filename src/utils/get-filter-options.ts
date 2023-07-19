@@ -13,7 +13,7 @@ export const orbitRegimeOptions = [
   )
 ]
 
-export const orbitTypeOptions = [
+export const objectTypeOptions = [
   ...new Set(
     (satellitesData as Satellite[]).filter((obj) => obj !== null).map((obj) => obj.objectType)
   )
