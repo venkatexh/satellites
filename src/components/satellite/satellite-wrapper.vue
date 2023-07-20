@@ -11,9 +11,10 @@ defineProps({
 </script>
 
 <template>
-  <div :class="`${satellites.length !== 0 && 'border-b'} border-white`">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 w-full mx-auto gap-6">
     <div v-for="satellite in satellites" :key="satellite.noradCatId">
       <SatelliteTile :satellite="satellite" />
     </div>
   </div>
+  <hr v-if="satellites.length !== 0" class="h-[0.5px]" />
 </template>

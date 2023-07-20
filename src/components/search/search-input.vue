@@ -17,6 +17,6 @@ defineProps({
     type="text"
     :placeholder="placeholder"
     @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
-    class="border border-white bg-black rounded-md h-8 px-2"
+    class="border border-white bg-black rounded-md h-8 px-2 w-full"
   />
 </template>

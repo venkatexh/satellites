@@ -91,27 +91,29 @@ watch([searchString, countryCodeFilter, orbitRegimeFilter, objectTypeFilter], ()
 </script>
 
 <template>
-  <div class="w-[50%] mx-auto flex flex-col gap-2 my-12">
-    <SearchInput placeholder="Search Satellites" v-model="searchString" />
-    <div class="flex justify-between gap-2">
-      <DropdownInput
-        v-model="countryCodeFilter"
-        :filterOptions="countryCodeOptions"
-        name="countryCode"
-        defaultValue="Select Country Code"
-      />
-      <DropdownInput
-        v-model="orbitRegimeFilter"
-        :filterOptions="orbitRegimeOptions"
-        name="orbitRegime"
-        defaultValue="Select Orbit Regime"
-      />
-      <DropdownInput
-        v-model="objectTypeFilter"
-        :filterOptions="objectTypeOptions"
-        name="objectType"
-        defaultValue="Select Object Type"
-      />
+  <div class="w-4/5 mx-auto px-2 lg:w-3/5 lg:mx-auto flex flex-col gap-2 my-12">
+    <div class="w-full mx-auto lg:w-full flex flex-col gap-2">
+      <SearchInput placeholder="Search Satellites" v-model="searchString" />
+      <div class="flex justify-between gap-2">
+        <DropdownInput
+          v-model="countryCodeFilter"
+          :filterOptions="countryCodeOptions"
+          name="countryCode"
+          defaultValue="Select Country Code"
+        />
+        <DropdownInput
+          v-model="orbitRegimeFilter"
+          :filterOptions="orbitRegimeOptions"
+          name="orbitRegime"
+          defaultValue="Select Orbit Regime"
+        />
+        <DropdownInput
+          v-model="objectTypeFilter"
+          :filterOptions="objectTypeOptions"
+          name="objectType"
+          defaultValue="Select Object Type"
+        />
+      </div>
     </div>
     <NoData v-if="satellitesRenderData.length === 0 && !loading" />
     <LoaderComponent v-if="loading" />

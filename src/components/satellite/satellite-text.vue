@@ -8,6 +8,6 @@ defineProps({
 <template>
   <div class="my-3">
     <div class="text-xs">{{ title }}</div>
-    <div class="text-sm font-medium">{{ text }}</div>
+    <div class="text-md lg:text-sm font-medium">{{ text }}</div>
   </div>
 </template>
