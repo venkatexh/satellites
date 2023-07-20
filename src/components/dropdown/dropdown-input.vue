@@ -23,6 +23,7 @@ defineProps({
   <select
     :value="modelValue"
     :name="name"
+    @change="$emit('update:modelValue', ($event.target as HTMLSelectElement).value)"
     class="bg-black w-1/3 text-white border border-white rounded-md h-8"
   >
     <option value="">{{ defaultValue }}</option>
