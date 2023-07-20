@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import SatelliteText from './satellite-text.vue'
 import TextWrapper from './text-wrapper.vue'
+import { imageLinks } from '@/constants/image-links'
 defineProps({
   satellite: {
     type: Object,
@@ -13,10 +14,10 @@ defineProps({
 </script>
 
 <template>
-  <div class="grid grid-cols-1 lg:grid-cols-5 items-center lg:gap-6 my-6 p-1">
+  <div class="grid grid-cols-1 lg:grid-cols-5 items-center lg:gap-6 my-6 p-1 auto-rows-auto">
     <div>
       <img
-        src="https://telecomtalk.info/wp-content/uploads/2023/03/will-satellite-internet-really-be-able-to.jpeg"
+        :src="imageLinks[Math.floor(Math.random() * imageLinks.length)].link"
         :alt="satellite.name"
         class="rounded-lg"
       />
