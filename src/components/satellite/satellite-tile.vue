@@ -5,6 +5,9 @@ defineProps({
   satellite: {
     type: Object,
     required: true
+  },
+  showDivider: {
+    type: Boolean
   }
 })
 </script>
@@ -39,5 +42,5 @@ defineProps({
       View
     </div>
   </div>
-  <hr class="bg-white w-[95%] h-[0.5px] opacity-10 mx-auto hidden lg:block" />
+  <hr v-if="showDivider" class="bg-white w-[95%] h-[0.5px] opacity-10 mx-auto hidden lg:block" />
 </template>
